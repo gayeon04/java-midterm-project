@@ -36,7 +36,7 @@ public class KillQuest extends Quest {
 
         if (matches) {
             currentKills++;
-            System.out.printf("   [퀘스트] %s: %d / %d%n", title, currentKills, requiredKills);
+            com.hotmail.kalebmarc.textfighter.main.Ui.println("   [퀘스트] " + title + ": " + currentKills + " / " + requiredKills);
             if (currentKills >= requiredKills) {
                 complete();
             }

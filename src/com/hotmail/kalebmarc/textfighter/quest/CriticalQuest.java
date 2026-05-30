@@ -22,7 +22,7 @@ public class CriticalQuest extends Quest {
         if (event != GameEvent.CRITICAL_HIT) return;
 
         currentCrits++;
-        System.out.printf("   [퀘스트] %s: %d / %d%n", title, currentCrits, requiredCrits);
+        com.hotmail.kalebmarc.textfighter.main.Ui.println("   [퀘스트] " + title + ": " + currentCrits + " / " + requiredCrits);
         if (currentCrits >= requiredCrits) {
             complete();
         }

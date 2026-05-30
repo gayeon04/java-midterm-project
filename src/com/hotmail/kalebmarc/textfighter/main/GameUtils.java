@@ -8,11 +8,11 @@ public class GameUtils {
   * This is a Utility Class for modifying String
   */
   public static void print(String input) {
-    System.out.print(input);
+    Ui.print(input);
   }
 
   public static void println(String input) {
-    print(input + "\n");
+    Ui.println(input);
   }
 
   public static void showPopup(String header, String subheader, List<?> message, List<?> inputs) {

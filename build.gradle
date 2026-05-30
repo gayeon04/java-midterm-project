@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 repositories {
@@ -50,6 +51,11 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+javafx {
+    version = '21'
+    modules = ['javafx.controls', 'javafx.graphics', 'javafx.base']
 }
 
 tasks.withType(JavaCompile) {

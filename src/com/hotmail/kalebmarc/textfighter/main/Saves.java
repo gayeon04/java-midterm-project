@@ -150,7 +150,7 @@ public class Saves {
 		Settings.difLocked = getBoolean("Settings.Difficulty.Locked");
 		if(getBoolean("Settings.Cheats.Enabled")) Cheats.enable();
 		if(getBoolean("Settings.Cheats.Locked")) Cheats.lock();
-		guiEnabled = getBoolean("Settings.GUI.Enabled");
+		// guiEnabled는 세이브 파일로 덮어쓰지 않음 — 실행 시 결정된 값 유지
 
 		//Combat
 		Stats.kills = getInteger("Stats.Kills");
@@ -373,7 +373,6 @@ public class Saves {
 		path = path.replaceAll("%20", " ").substring(0, path.lastIndexOf('/'));
 
 		File dir = new File(path + "/");
-		System.out.println(dir);
 
 		File[] saveList = dir.listFiles((dir1, name) -> name.endsWith(".TFsave"));
 
@@ -382,8 +381,8 @@ public class Saves {
 		println("Choose a save game...");
 		println("------------------------------");
 		for (int i = 0; i < saveList.length; i++)
-			System.out.printf("%d) %s%n", i + 1, saveList[i].getName().substring(0, saveList[i].getName().lastIndexOf(".TFsave")));
-		System.out.printf("0) EXIT%n");
+			println((i + 1) + ") " + saveList[i].getName().substring(0, saveList[i].getName().lastIndexOf(".TFsave")));
+		println("0) EXIT");
 
 		int response = getValidInt(0, saveList.length);
 

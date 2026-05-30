@@ -16,7 +16,6 @@ class Menu {
 
       switch (Ui.getValidInt()) {
         case 1:
-          Ui.guiEnabled = false;
           new Game().start();
 
           //Saves the game before exiting
