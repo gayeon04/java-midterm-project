@@ -3,7 +3,7 @@ package com.hotmail.kalebmarc.textfighter.battle;
 /**
  * [Step 3] BattleManager + Strategy Pattern 테스트
  */
-public class Battlemanagertest {
+public class BattleManagerTest {
 
     public static void main(String[] args) {
         System.out.println("=== Step 3: BattleManager (Strategy Pattern) 테스트 ===\n");

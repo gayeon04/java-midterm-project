@@ -10,10 +10,13 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'junit:junit:4.+'
     testImplementation 'org.mockito:mockito-core:5.+'
     implementation 'com.google.guava:guava:31.0.1-jre'
     implementation 'org.yaml:snakeyaml:1.+'
+    implementation 'org.hibernate.orm:hibernate-core:6.4.4.Final'
+    implementation 'com.h2database:h2:2.2.224'
 }
 
 sourceSets {

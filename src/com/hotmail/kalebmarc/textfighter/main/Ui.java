@@ -96,7 +96,7 @@ public class Ui {
             if (w != null) w.appendLog("  [ Enter 또는 버튼을 눌러 계속... ]");
             try { GameFXWindow.INPUT_QUEUE.take(); } catch (InterruptedException ignored) {}
         } else {
-            try { new Scanner(System.in).nextLine(); } catch (Exception ignored) {}
+            try { IN.nextLine(); } catch (Exception ignored) {}
         }
     }
 

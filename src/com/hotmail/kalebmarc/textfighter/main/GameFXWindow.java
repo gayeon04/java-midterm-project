@@ -84,7 +84,7 @@ public class GameFXWindow {
         });
 
         stage.setScene(scene);
-        stage.setOnCloseRequest(e -> System.exit(0));
+        stage.setOnCloseRequest(e -> Platform.exit());
         stage.show();
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(400), e -> refresh()));

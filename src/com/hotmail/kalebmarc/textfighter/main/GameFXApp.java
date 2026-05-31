@@ -1,5 +1,6 @@
 package com.hotmail.kalebmarc.textfighter.main;
 
+import com.hotmail.kalebmarc.textfighter.db.JpaManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -21,7 +22,11 @@ public class GameFXApp extends Application {
 
     @Override
     public void stop() {
-        // Platform.exit() 호출 시 JVM도 종료
+        // 창 닫기(X) → Platform.exit() → 여기서 JPA 닫고 JVM 종료
+        // case 10 정상 종료 시에도 호출될 수 있으므로 isInitialized()로 이중 닫기 방지
+        if (JpaManager.isInitialized()) {
+            try { JpaManager.getInstance().close(); } catch (Exception ignored) {}
+        }
         System.exit(0);
     }
 }

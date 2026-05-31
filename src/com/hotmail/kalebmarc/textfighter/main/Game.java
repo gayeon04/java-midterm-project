@@ -12,6 +12,8 @@ import com.hotmail.kalebmarc.textfighter.quest.CriticalQuest;
 import com.hotmail.kalebmarc.textfighter.quest.GameEvent;
 import com.hotmail.kalebmarc.textfighter.quest.KillQuest;
 import com.hotmail.kalebmarc.textfighter.quest.QuestManager;
+import com.hotmail.kalebmarc.textfighter.db.JpaManager;
+import com.hotmail.kalebmarc.textfighter.db.SaveService;
 import com.hotmail.kalebmarc.textfighter.util.AutoSaveTask;
 import com.hotmail.kalebmarc.textfighter.util.GameLogger;
 
@@ -106,6 +108,7 @@ public class Game {
 	private static BattleManager battleManager;
 	private static BattleRecord  battleRecord;
 	private static AutoSaveTask  autoSave;
+	private static SaveService   saveService;
 	private static final GameLogger    logger       = GameLogger.getInstance();
 	private static final QuestManager  questManager = QuestManager.getInstance();
 
@@ -118,10 +121,11 @@ public class Game {
 		battleManager = new BattleManager(AttackStrategies.MELEE);
 		battleRecord  = new BattleRecord(User.name());
 
-		// 멀티스레드: 30초마다 자동저장
+		// 멀티스레드: 30초마다 JPA 자동저장
+		saveService = new SaveService();
 		autoSave = new AutoSaveTask(() -> {
-			Saves.save(false);  // false = 기존 파일 덮어쓰기
-			logger.save("자동저장 완료");
+			saveService.saveGame("AUTO");
+			logger.save("JPA 자동저장 완료");
 		}, 30);
 
 		// Observer Pattern: 퀘스트 등록
@@ -336,6 +340,8 @@ public class Game {
 				case 10:
 					Stats.timesQuit++;
 					autoSave.stop();
+					saveService.saveRanking();
+					JpaManager.getInstance().close();
 					printBattleReport();
 					questManager.printStatus();
 					logger.info("게임 종료");
@@ -461,10 +467,10 @@ public class Game {
 				asList("난이도를 선택하세요"),
 				asList("나가기", "쉬움", "어려움")
 		);
-		if (!SCAN.hasNextInt()) { Ui.cls(); return "Exit"; }
-		int c = SCAN.nextInt();
-		if (c == 2) { Ui.cls(); return "Easy"; }
-		else if (c == 3) { Ui.cls(); return "Hard"; }
-		else { Ui.cls(); return "Exit"; }
+		int c = Ui.getValidInt();
+		Ui.cls();
+		if (c == 2) return "Easy";
+		if (c == 3) return "Hard";
+		return "Exit";
 	}
 }
