@@ -17,6 +17,21 @@ dependencies {
     implementation 'org.yaml:snakeyaml:1.+'
     implementation 'org.hibernate.orm:hibernate-core:6.4.4.Final'
     implementation 'com.h2database:h2:2.2.224'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.4'
+    // Spring Boot REST API + JWT
+    // snakeyaml 제외: 기존 Saves.java가 1.x API를 사용하므로 Spring Boot의 2.x 충돌 방지
+    implementation('org.springframework.boot:spring-boot-starter-web:3.2.4') {
+        exclude group: 'org.yaml', module: 'snakeyaml'
+    }
+    implementation('org.springframework.boot:spring-boot-starter-security:3.2.4') {
+        exclude group: 'org.yaml', module: 'snakeyaml'
+    }
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly    'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly    'io.jsonwebtoken:jjwt-jackson:0.12.5'
+    implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0') {
+        exclude group: 'org.yaml', module: 'snakeyaml'
+    }
 }
 
 sourceSets {
@@ -63,6 +78,7 @@ javafx {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'  // Spring @PathVariable 파라미터명 인식에 필요
 }
 
 tasks.named('test') {
@@ -77,4 +93,11 @@ run{
 tasks.withType(JavaExec) {
     environment 'JAVA_TOOL_OPTIONS', '-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8'
     jvmArgs '-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-Dsun.stdout.encoding=UTF-8'
+}
+
+// Spring Boot REST API 서버 실행 (포트 8080)
+task runApi(type: JavaExec, group: 'application', description: 'REST API 서버 시작') {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.hotmail.kalebmarc.textfighter.api.ApiApplication'
+    jvmArgs '-Dfile.encoding=UTF-8'
 }

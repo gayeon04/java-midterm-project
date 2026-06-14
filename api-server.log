@@ -1,0 +1,47 @@
+> Task :compileJava UP-TO-DATE
+> Task :processResources
+> Task :classes
+
+> Task :runApi
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.4)
+
+2026-06-14T16:52:02.110+09:00  INFO 9244 --- [           main] c.h.k.textfighter.api.ApiApplication     : Starting ApiApplication using Java 21.0.6 with PID 9244 (C:\Users\Jogyeon\OneDrive\Documents\GitHub\Text-Fighter\build\classes\java\main started by Jogyeon in C:\Users\Jogyeon\OneDrive\Documents\GitHub\Text-Fighter)
+2026-06-14T16:52:02.116+09:00  INFO 9244 --- [           main] c.h.k.textfighter.api.ApiApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-06-14T16:52:03.595+09:00  INFO 9244 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-06-14T16:52:03.612+09:00  INFO 9244 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-14T16:52:03.613+09:00  INFO 9244 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-06-14T16:52:03.700+09:00  INFO 9244 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-14T16:52:03.701+09:00  INFO 9244 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1503 ms
+2026-06-14T16:52:03.941+09:00  WARN 9244 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 4cd972eb-17b2-47c4-bf3d-2ed37065db1d
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-06-14T16:52:04.372+09:00  INFO 9244 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@717d7587, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3e906375, org.springframework.security.web.context.SecurityContextHolderFilter@5f174dd2, org.springframework.security.web.header.HeaderWriterFilter@443faa85, org.springframework.web.filter.CorsFilter@40230eb9, org.springframework.security.web.authentication.logout.LogoutFilter@4e83a98, com.hotmail.kalebmarc.textfighter.api.JwtAuthFilter@859ea42, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@45aca496, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@697173d9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5b7aa898, org.springframework.security.web.session.SessionManagementFilter@138aa3cc, org.springframework.security.web.access.ExceptionTranslationFilter@340d6d89, org.springframework.security.web.access.intercept.AuthorizationFilter@47311277]
+2026-06-14T16:52:04.642+09:00  INFO 9244 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-06-14T16:52:04.652+09:00  INFO 9244 --- [           main] c.h.k.textfighter.api.ApiApplication     : Started ApiApplication in 3.228 seconds (process running for 3.841)
+2026-06-14T16:52:13.082+09:00  INFO 9244 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-14T16:52:13.082+09:00  INFO 9244 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-14T16:52:13.083+09:00  INFO 9244 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-06-14T16:52:46.339+09:00  INFO 9244 --- [nio-8080-exec-6] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: textfighter-pu]
+2026-06-14T16:52:46.558+09:00  INFO 9244 --- [nio-8080-exec-6] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-06-14T16:52:46.689+09:00  INFO 9244 --- [nio-8080-exec-6] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-14T16:52:47.089+09:00  WARN 9244 --- [nio-8080-exec-6] org.hibernate.orm.connections.pooling    : HHH10001002: Using built-in connection pool (not intended for production use)
+2026-06-14T16:52:47.095+09:00  INFO 9244 --- [nio-8080-exec-6] org.hibernate.orm.connections.pooling    : HHH10001005: Loaded JDBC driver class: org.h2.Driver
+2026-06-14T16:52:47.097+09:00  INFO 9244 --- [nio-8080-exec-6] org.hibernate.orm.connections.pooling    : HHH10001012: Connecting with JDBC URL [jdbc:h2:./saves/textfighter;AUTO_SERVER=TRUE]
+2026-06-14T16:52:47.098+09:00  INFO 9244 --- [nio-8080-exec-6] org.hibernate.orm.connections.pooling    : HHH10001001: Connection properties: {password=****, user=sa}
+2026-06-14T16:52:47.098+09:00  INFO 9244 --- [nio-8080-exec-6] org.hibernate.orm.connections.pooling    : HHH10001003: Autocommit mode: false
+2026-06-14T16:52:47.108+09:00  INFO 9244 --- [nio-8080-exec-6] org.hibernate.orm.connections.pooling    : HHH10001115: Connection pool size: 20 (min=1)
+2026-06-14T16:52:52.292+09:00  WARN 9244 --- [nio-8080-exec-6] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-14T16:52:55.293+09:00  INFO 9244 --- [nio-8080-exec-6] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-14T16:52:55.342+09:00  INFO 9244 --- [nio-8080-exec-6] org.hibernate.orm.connections.access     : HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@2443b44e] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+[H2 Console] http://localhost:8082  (게임 실행 중 DB 확인용)
+[H2 Console] JDBC URL: jdbc:h2:./saves/textfighter;AUTO_SERVER=TRUE

@@ -376,6 +376,15 @@ public class Saves {
 
 		File[] saveList = dir.listFiles((dir1, name) -> name.endsWith(".TFsave"));
 
+		if (saveList == null || saveList.length == 0) {
+			cls();
+			println("------------------------------");
+			println("저장된 게임이 없습니다.");
+			println("------------------------------");
+			pause();
+			return false;
+		}
+
 		cls();
 		println("------------------------------");
 		println("Choose a save game...");
