@@ -20,6 +20,11 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import com.hotmail.kalebmarc.textfighter.api.LeaderboardClient;
+
+import javafx.stage.Modality;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -209,7 +214,10 @@ public class GameFXWindow {
         field.setOnAction(e -> submit.run());
         ok.setOnAction(e -> submit.run());
 
-        HBox inputRow = new HBox(6, prompt, field, ok);
+        Button rankingBtn = actionBtn("🏆 랭킹");
+        rankingBtn.setOnAction(e -> showLeaderboard());
+
+        HBox inputRow = new HBox(6, prompt, field, ok, rankingBtn);
         inputRow.setAlignment(Pos.CENTER_LEFT);
         inputRow.setPadding(new Insets(4, 8, 4, 8));
 
@@ -362,6 +370,76 @@ public class GameFXWindow {
         });
         try { latch.await(); } catch (InterruptedException ignored) {}
         return result[0];
+    }
+
+    // ── 랭킹 팝업 ────────────────────────────────────────────────────
+
+    private void showLeaderboard() {
+        new Thread(() -> {
+            try {
+                System.out.println("[랭킹] 로그인 시도...");
+                LeaderboardClient apiClient = new LeaderboardClient();
+                boolean loggedIn = apiClient.login("hero", "1234");
+                System.out.println("[랭킹] 로그인 결과: " + loggedIn);
+                if (!loggedIn) {
+                    Platform.runLater(() -> showError("로그인 실패"));
+                    return;
+                }
+                List<String> rankings = apiClient.fetchLeaderboard();
+                System.out.println("[랭킹] 받은 항목 수: " + rankings.size());
+                Platform.runLater(() -> {
+                    try {
+                        showRankingPopup(rankings);
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        showError("팝업 오류: " + t.getMessage());
+                    }
+                });
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+                Platform.runLater(() -> showError("서버 연결 실패: " + ex.getMessage()));
+            }
+        }).start();
+    }
+
+    private void showRankingPopup(List<String> rankings) {
+        Stage popup = new Stage();
+        popup.setTitle("🏆 명예의 전당");
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.initOwner(stage);
+
+        VBox box = new VBox(10);
+        box.setPadding(new Insets(20));
+        box.setAlignment(Pos.CENTER);
+
+        Label title = new Label("🏆 TOP 10 랭킹");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        box.getChildren().add(title);
+
+        for (String entry : rankings) {
+            Label lbl = new Label(entry);
+            lbl.setStyle("-fx-font-size: 14px;");
+            box.getChildren().add(lbl);
+        }
+
+        if (rankings.isEmpty()) {
+            box.getChildren().add(new Label("아직 기록이 없습니다."));
+        }
+
+        Button closeBtn = new Button("닫기");
+        closeBtn.setOnAction(e -> popup.close());
+        box.getChildren().add(closeBtn);
+
+        popup.setScene(new Scene(box, 400, 500));
+        popup.show();
+    }
+
+    private void showError(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(stage);
+        alert.setTitle("오류");
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 
     // ── UI 빌더 헬퍼 ─────────────────────────────────────────────────

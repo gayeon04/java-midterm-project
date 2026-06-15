@@ -84,18 +84,38 @@ public class SaveService {
         }
     }
 
-    /** 게임 종료 시 랭킹 등록 */
+    /** 게임 종료 시 랭킹 등록 — 플레이어당 최고 기록만 유지 (upsert) */
     public void saveRanking() {
         try (EntityManager em = JpaManager.getInstance().createEntityManager()) {
             em.getTransaction().begin();
             try {
-                RankingEntry entry = new RankingEntry();
-                entry.setPlayerName(User.name());
+                List<RankingEntry> existing = em.createQuery(
+                        "SELECT r FROM RankingEntry r WHERE r.playerName = :name",
+                        RankingEntry.class)
+                        .setParameter("name", User.name())
+                        .getResultList();
+
+                RankingEntry entry;
+                if (!existing.isEmpty()) {
+                    RankingEntry prev = existing.get(0);
+                    int curLevel = Xp.getLevel(), curXp = Xp.get();
+                    // 이전 기록보다 못하면 업데이트 안 함
+                    if (curLevel < prev.getLevel() ||
+                            (curLevel == prev.getLevel() && curXp <= prev.getXp())) {
+                        em.getTransaction().rollback();
+                        return;
+                    }
+                    entry = prev;
+                } else {
+                    entry = new RankingEntry();
+                    entry.setPlayerName(User.name());
+                    em.persist(entry);
+                }
+
                 entry.setLevel(Xp.getLevel());
                 entry.setTotalKills(Stats.totalKills);
                 entry.setXp(Xp.get());
                 entry.setPlayedAt(LocalDateTime.now());
-                em.persist(entry);
                 em.getTransaction().commit();
             } catch (Exception e) {
                 em.getTransaction().rollback();
@@ -124,7 +144,7 @@ public class SaveService {
         }
     }
 
-    /** 상위 10개 랭킹 조회 (JPQL + Stream) */
+    /** 상위 10개 랭킹 조회 */
     public List<RankingEntry> getTopRankings() {
         try (EntityManager em = JpaManager.getInstance().createEntityManager()) {
             return em.createQuery(
@@ -132,9 +152,7 @@ public class SaveService {
                     RankingEntry.class
             )
             .setMaxResults(10)
-            .getResultList()
-            .stream()
-            .collect(Collectors.toList());
+            .getResultList();
         } catch (Exception e) {
             GameLogger.getInstance().error("랭킹 조회 실패: " + e.getMessage());
             return List.of();

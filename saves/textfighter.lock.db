@@ -1,6 +1,6 @@
 #FileLock
-#Sun Jun 14 18:21:23 KST 2026
-hostName=DESKTOP-TH4DJCK
-id=19ec56f83cd05cc45bf50c92b13858f15cda98ea589
+#Mon Jun 15 16:11:19 KST 2026
+hostName=192.168.123.106
+id=19eca1ecc88a9bcf6db55ae36afae2b040e0bd52ce7
 method=file
-server=172.30.1.3\:59127
+server=192.168.123.106\:53703
