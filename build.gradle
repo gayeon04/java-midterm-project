@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
+    testImplementation 'org.assertj:assertj-core:3.25.3'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'junit:junit:4.+'
     testImplementation 'org.mockito:mockito-core:5.+'
@@ -100,5 +101,25 @@ tasks.withType(JavaExec) {
 task runApi(type: JavaExec, group: 'application', description: 'REST API 서버 시작') {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.hotmail.kalebmarc.textfighter.api.ApiApplication'
+    jvmArgs '-Dfile.encoding=UTF-8'
+}
+
+// 멀티플레이 소켓 연결 테스트 ─ 터미널 1 (서버)
+task runConnectionServer(type: JavaExec, group: 'multiplayer', description: '소켓 연결 테스트 서버 (터미널 1)') {
+    dependsOn compileTestJava
+    classpath  = sourceSets.test.runtimeClasspath
+    mainClass  = 'com.hotmail.kalebmarc.textfighter.multiplayer.ConnectionTest'
+    args       = ['server']
+    standardInput = System.in
+    jvmArgs '-Dfile.encoding=UTF-8'
+}
+
+// 멀티플레이 소켓 연결 테스트 ─ 터미널 2 (클라이언트)
+task runConnectionClient(type: JavaExec, group: 'multiplayer', description: '소켓 연결 테스트 클라이언트 (터미널 2)') {
+    dependsOn compileTestJava
+    classpath  = sourceSets.test.runtimeClasspath
+    mainClass  = 'com.hotmail.kalebmarc.textfighter.multiplayer.ConnectionTest'
+    args       = ['client']
+    standardInput = System.in
     jvmArgs '-Dfile.encoding=UTF-8'
 }

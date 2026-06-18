@@ -1,6 +1,4 @@
 #FileLock
-#Mon Jun 15 16:11:19 KST 2026
-hostName=192.168.123.106
-id=19eca1ecc88a9bcf6db55ae36afae2b040e0bd52ce7
+#Thu Jun 18 15:31:57 KST 2026
+id=19ed96dd83d994fefb24c71cb9a52c9cffc0a4db67f
 method=file
-server=192.168.123.106\:53703

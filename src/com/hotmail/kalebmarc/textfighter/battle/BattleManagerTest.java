@@ -1,65 +1,175 @@
 package com.hotmail.kalebmarc.textfighter.battle;
 
-/**
- * [Step 3] BattleManager + Strategy Pattern 테스트
- */
-public class BattleManagerTest {
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-    public static void main(String[] args) {
-        System.out.println("=== Step 3: BattleManager (Strategy Pattern) 테스트 ===\n");
+import static org.assertj.core.api.Assertions.*;
 
-        // ① 근접 전략으로 시작
-        System.out.println("① 근접 무기 (주먹) 전략:");
-        BattleManager manager = new BattleManager(AttackStrategies.MELEE);
+@DisplayName("BattleManager - 전투 전략 테스트")
+class BattleManagerTest {
 
-        for (int i = 0; i < 3; i++) {
-            int dmg = manager.attack(5, 10, "주먹");
+    private BattleManager manager;
+
+    @BeforeEach
+    void setUp() {
+        manager = new BattleManager(AttackStrategies.MELEE);
+    }
+
+    // ── MELEE ────────────────────────────────────────────────────────────
+
+    @Nested
+    @DisplayName("MELEE 전략")
+    class MeleeStrategy {
+
+        @Test
+        @DisplayName("근접 공격은 설정한 범위 안의 데미지를 반환한다")
+        void melee_damage_is_within_range() {
+            // Arrange
+            int min = 5, max = 15;
+
+            // Act
+            int damage = manager.attack(min, max, "주먹");
+
+            // Assert
+            assertThat(damage).isBetween(min, max);
+        }
+
+        @ParameterizedTest(name = "min={0}, max={1} 범위")
+        @CsvSource({"1,5", "5,15", "10,20", "15,30"})
+        @DisplayName("다양한 범위에서 데미지가 항상 범위 내에 있다")
+        void melee_damage_various_ranges(int min, int max) {
+            // Arrange
+            BattleManager m = new BattleManager(AttackStrategies.MELEE);
+
+            // Act & Assert — 100회 반복해도 범위 이탈 없음
+            for (int i = 0; i < 100; i++) {
+                int damage = m.attack(min, max, "주먹");
+                assertThat(damage).isBetween(min, max);
+            }
+        }
+
+        @Test
+        @DisplayName("공격 후 turnsPlayed가 1 증가한다")
+        void attack_increments_turns_played() {
+            // Arrange
+            int before = manager.getTurnsPlayed();
+
+            // Act
+            manager.attack(5, 10, "주먹");
+
+            // Assert
+            assertThat(manager.getTurnsPlayed()).isEqualTo(before + 1);
+        }
+
+        @Test
+        @DisplayName("reset 후 모든 통계가 0이 된다")
+        void reset_clears_all_stats() {
+            // Arrange — 통계 누적
+            manager.attack(5, 10, "주먹");
             manager.takeDamage(8, "좀비");
+
+            // Act
+            manager.reset();
+
+            // Assert
+            assertThat(manager.getTotalDamageDealt()).isZero();
+            assertThat(manager.getTotalDamageTaken()).isZero();
+            assertThat(manager.getTurnsPlayed()).isZero();
+            assertThat(manager.getCriticalHits()).isZero();
+            assertThat(manager.getMissCount()).isZero();
         }
-        manager.printLog();
+    }
 
-        // ② 런타임에 전략 교체 - 저격 전략으로
-        System.out.println("\n② 무기 변경 → 저격총 전략으로 교체:");
-        manager.reset();
-        manager.setStrategy(AttackStrategies.SNIPER);
+    // ── SNIPER ───────────────────────────────────────────────────────────
 
-        for (int i = 0; i < 4; i++) {
-            int dmg = manager.attack(20, 35, "저격총");
-            if (dmg > 0) manager.takeDamage(5, "좀비");
+    @Nested
+    @DisplayName("SNIPER 전략")
+    class SniperStrategy {
+
+        @BeforeEach
+        void useSniper() {
+            manager.setStrategy(AttackStrategies.SNIPER);
         }
-        manager.printLog();
 
-        // ③ 고차 함수 - 성향 보너스 전략
-        System.out.println("\n③ 공격적 성향 보너스 (+5) 적용:");
-        manager.reset();
-        AttackStrategy aggressiveStrategy = AttackStrategies.withBonus(AttackStrategies.MELEE, 5);
-        manager.setStrategy(aggressiveStrategy);
-
-        for (int i = 0; i < 3; i++) {
-            manager.attack(5, 10, "주먹 (공격적)");
+        @Test
+        @DisplayName("저격 전략 전환 시 getBattleLog에 전략 변경 로그가 남는다")
+        void sniper_strategy_log_recorded() {
+            // Assert
+            assertThat(manager.getBattleLog())
+                .anyMatch(log -> log.contains("전략 변경"));
         }
-        manager.printLog();
 
-        // ④ 전투 통계 출력
-        System.out.println("\n④ 전투 통계:");
-        System.out.println("   총 가한 데미지 : " + manager.getTotalDamageDealt());
-        System.out.println("   총 받은 데미지 : " + manager.getTotalDamageTaken());
-        System.out.println("   총 턴 수       : " + manager.getTurnsPlayed());
-        System.out.println("   크리티컬 횟수  : " + manager.getCriticalHits());
-        System.out.println("   빗나간 횟수    : " + manager.getMissCount());
+        @Test
+        @DisplayName("저격 전략의 데미지는 0 이상이다 (빗나감 포함)")
+        void sniper_damage_is_non_negative() {
+            // Act & Assert — 30회 반복
+            for (int i = 0; i < 30; i++) {
+                int damage = manager.attack(10, 20, "저격총");
+                assertThat(damage).isGreaterThanOrEqualTo(0);
+            }
+        }
+    }
 
-        // ⑤ 람다로 커스텀 전략 즉석 정의
-        System.out.println("\n⑤ 람다로 즉석 커스텀 전략 정의:");
-        AttackStrategy berserker = (min, max) -> {
-            // 체력이 낮을수록 강해지는 버서커 전략
-            int baseDmg = min + (int)(Math.random() * (max - min + 1));
-            return (int)(baseDmg * 1.3); // 항상 130% 데미지
-        };
-        manager.reset();
-        manager.setStrategy(berserker);
-        manager.attack(10, 20, "버서커 주먹");
-        manager.printLog();
+    // ── 피해 수신 ─────────────────────────────────────────────────────────
 
-        System.out.println("\n=== 테스트 완료 ===");
+    @Nested
+    @DisplayName("피해 수신")
+    class TakeDamage {
+
+        @Test
+        @DisplayName("takeDamage 호출 시 totalDamageTaken이 증가한다")
+        void take_damage_increments_total() {
+            // Arrange
+            int dmg = 20;
+
+            // Act
+            manager.takeDamage(dmg, "좀비");
+
+            // Assert
+            assertThat(manager.getTotalDamageTaken()).isEqualTo(dmg);
+        }
+
+        @Test
+        @DisplayName("takeDamage를 여러 번 호출하면 누적 합산된다")
+        void take_damage_accumulates() {
+            // Act
+            manager.takeDamage(10, "좀비");
+            manager.takeDamage(15, "고블린");
+
+            // Assert
+            assertThat(manager.getTotalDamageTaken()).isEqualTo(25);
+        }
+    }
+
+    // ── 전략 교체 ─────────────────────────────────────────────────────────
+
+    @Nested
+    @DisplayName("런타임 전략 교체")
+    class StrategySwitch {
+
+        @Test
+        @DisplayName("withBonus 전략은 기본 데미지에 보너스가 더해진다")
+        void bonus_strategy_adds_bonus_damage() {
+            // Arrange — 보너스 100이면 최소 데미지도 105 이상
+            AttackStrategy bonus = AttackStrategies.withBonus(AttackStrategies.MELEE, 100);
+
+            // Act
+            manager.setStrategy(bonus);
+            int damage = manager.attack(5, 10, "보너스 무기");
+
+            // Assert
+            assertThat(damage).isGreaterThanOrEqualTo(105);
+        }
+
+        @Test
+        @DisplayName("전략 교체 후 getBattleLog 크기가 1 이상이다")
+        void log_grows_after_strategy_change() {
+            // Act
+            manager.setStrategy(AttackStrategies.SHOTGUN);
+
+            // Assert
+            assertThat(manager.getBattleLog()).isNotEmpty();
+        }
     }
 }

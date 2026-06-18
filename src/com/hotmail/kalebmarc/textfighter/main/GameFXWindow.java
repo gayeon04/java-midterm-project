@@ -217,7 +217,10 @@ public class GameFXWindow {
         Button rankingBtn = actionBtn("🏆 랭킹");
         rankingBtn.setOnAction(e -> showLeaderboard());
 
-        HBox inputRow = new HBox(6, prompt, field, ok, rankingBtn);
+        Button multiBtn = actionBtn("⚔ 멀티플레이");
+        multiBtn.setOnAction(e -> new MultiplayerLobbyController(stage).show());
+
+        HBox inputRow = new HBox(6, prompt, field, ok, rankingBtn, multiBtn);
         inputRow.setAlignment(Pos.CENTER_LEFT);
         inputRow.setPadding(new Insets(4, 8, 4, 8));
 
