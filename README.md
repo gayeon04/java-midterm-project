@@ -253,7 +253,7 @@ http://localhost:8080
 | Observer Pattern | `QuestManager`, `Quest` | Observer, abstract class |
 | 멀티스레드 자동저장 | `AutoSaveTask`, `GameLogger` | Thread, AtomicInteger, Singleton |
 
-자세한 내용은 `README.md`를 참고하세요.
+자세한 내용은 `README_v0.md`를 참고하세요.
 
 ---
 
