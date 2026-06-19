@@ -532,8 +532,6 @@ Authorization: Bearer JWT_TOKEN_VALUE
 
 ## 실행 화면
 
-> 아래 이미지 경로는 실제 스크린샷 파일명에 맞게 수정하면 됩니다.
-
 
 ### JavaFX 메인 화면
 
