@@ -548,7 +548,7 @@ Authorization: Bearer JWT_TOKEN_VALUE
 ![REST API 응답](screenshots/restapi2_1.png)
 ![REST API 응답](screenshots/restapi3.png)
 
-### 테스트 실행 결과
+### 테스트
 
 ![테스트 코드](screenshots/test.png)
 
@@ -627,9 +627,5 @@ README와 발표 자료는 Claude 초안을 바탕으로 프로젝트 실제 구
 
 ---
 
-## 마무리
-
-Text Fighter Upgrade는 단순한 텍스트 RPG를 Java 고급 개념 학습용 프로젝트로 확장한 결과물입니다.  
-콘솔 게임에서 시작해 GUI, API, DB, 인증, 테스트, 네트워크까지 연결하면서 하나의 Java 프로젝트가 여러 계층으로 확장되는 과정을 경험할 수 있었습니다.
 
 *고급 자바 프로그래밍 | 2026년 1학기*
